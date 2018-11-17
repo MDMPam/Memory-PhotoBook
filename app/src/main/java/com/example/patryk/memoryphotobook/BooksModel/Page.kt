@@ -1,5 +1,6 @@
 package com.example.patryk.memoryphotobook.BooksModel
 
+import android.graphics.Bitmap
 import android.graphics.Color
 
 class Page(
@@ -7,20 +8,27 @@ class Page(
 ) {
     val stickerList:MutableList<Sticker> = mutableListOf()
     val textList:MutableList<Text> = mutableListOf()
-    val richImageList:MutableList<RIchImage> = mutableListOf()
+    val richImageList:MutableList<RichImage> = mutableListOf()
 
-    internal val template:PageTemplate=PageTemplate.None
+    internal var template:PageTemplate=PageTemplate.None
 
-    fun addSticker(sticker:Sticker){
-        stickerList.add(sticker)
+    fun addSticker(source:Bitmap):Sticker{
+        template=PageTemplate.None
+        var stick = Sticker(source)
+        stickerList.add(stick)
+        return stick
     }
 
-    fun addText(text:Text){
+    fun addText(text:String):Text{
+        var text=Text(text)
         textList.add(text)
+        return text
     }
 
-    fun addRichImage(image:RIchImage){
+    fun addRichImage(source:Bitmap):RichImage{
+        var image=RichImage(source)
         richImageList.add(image)
+        return image
     }
 
 }

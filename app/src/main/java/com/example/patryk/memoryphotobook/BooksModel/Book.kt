@@ -9,7 +9,7 @@ class Book(
     var defaultBackgrounColor:Color,
     var defaultPageTemplate:PageTemplate)
 {
-    var coverPage:Page?=null
+    var coverPage:Page=PageFactory.buildCoverPage(defaultPageTemplate)
     var pageList:MutableList<Page> = mutableListOf()
 
     fun addPage(template:PageTemplate=defaultPageTemplate)

@@ -8,5 +8,9 @@ class PageFactory {
         {
             return  Page(Color())
         }
+        fun buildCoverPage(temp: PageTemplate):Page
+        {
+            return Page(Color())
+        }
     }
 }

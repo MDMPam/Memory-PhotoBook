@@ -7,8 +7,8 @@ import android.R.attr.textSize
 import android.graphics.Canvas
 
 
-class Text:Image() {
-    var text:String=""
+class Text(var text:String=""):Image() {
+
     var paint: Paint?=null
     override fun createBitmap() {
         if(paint!=null) {

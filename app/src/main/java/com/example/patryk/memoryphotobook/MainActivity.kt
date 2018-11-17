@@ -15,6 +15,12 @@ import com.example.patryk.memoryphotobook.BooksModel.Image
 import com.example.patryk.memoryphotobook.BooksModel.Sticker
 import android.widget.RelativeLayout
 import com.example.patryk.memoryphotobook.view.DisplayedSticker
+import android.view.View.DragShadowBuilder
+import android.content.ClipData
+import android.view.MotionEvent
+import android.view.View.OnTouchListener
+
+
 
 
 class MainActivity : AppCompatActivity(),DisplayView {
@@ -48,7 +54,9 @@ class MainActivity : AppCompatActivity(),DisplayView {
             field=value
             val rl = findViewById<ConstraintLayout>(R.id.mainLayout)
             value.forEach {
-                rl.addView(DisplayedSticker(this,it))
+                var view =DisplayedSticker(this,it)
+                //view.setOnTouchListener(MyTouchListener())
+                rl.addView(view)
             }
           //  setContentView(rl)
            // rl.invalidate()
@@ -59,11 +67,39 @@ class MainActivity : AppCompatActivity(),DisplayView {
         setContentView(R.layout.activity_main)
         presenter= DisplayPresenter(this,"title")
         findViewById<Button>(R.id.button_createSticker).setOnClickListener {
-            presenter.addSticker(availableSticker[0])
+            presenter.move(presenter.addSticker(availableSticker[0]),Point(500,50))
         }
     }
-    fun refresh()
-    {
 
+
+    class MyTouchListener() : View.OnTouchListener {
+        var dX: Float = 0.toFloat()
+        var dY:Float = 0.toFloat()
+        override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
+            val X = motionEvent.getRawX().toInt()
+            val Y = motionEvent.getRawY().toInt()
+            when (motionEvent.getAction() and MotionEvent.ACTION_MASK) {
+                MotionEvent.ACTION_DOWN -> {
+                    dX = view.getX() - motionEvent.getRawX();
+                    dY = view.getY() - motionEvent.getRawY();
+                }
+                MotionEvent.ACTION_UP -> {
+                }
+                MotionEvent.ACTION_POINTER_DOWN -> {
+                }
+                MotionEvent.ACTION_POINTER_UP -> {
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    view.animate()
+                        .x(motionEvent.getRawX() + dX)
+                        .y(motionEvent.getRawY() + dY)
+                        .setDuration(0)
+                        .start();
+                }
+            }
+            //_root.invalidate()
+            return false
+
+        }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.patryk.memoryphotobook.BooksModel
 
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Point
 
 class Book(
     var title:String,
@@ -19,6 +21,15 @@ class Book(
     fun addPage(page:Page)
     {
         pageList.add(page)
+    }
+
+    fun addSticker(src:Bitmap,page:Page):Sticker{
+        return page.addSticker(src)
+    }
+    fun move(stick:Sticker,p:Point):Sticker
+    {
+        stick.possition=p
+        return stick
     }
 
 }

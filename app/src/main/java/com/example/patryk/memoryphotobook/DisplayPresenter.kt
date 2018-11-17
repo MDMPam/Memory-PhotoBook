@@ -1,6 +1,7 @@
 package com.example.patryk.memoryphotobook
 
 import android.graphics.Bitmap
+import android.graphics.Point
 import com.example.patryk.memoryphotobook.BooksModel.*
 
 class DisplayPresenter(var view:DisplayView, bookTitle:String) {
@@ -16,9 +17,13 @@ class DisplayPresenter(var view:DisplayView, bookTitle:String) {
         bookModel= DisplayBookModel(scaler.scaleBook( manager.loadBook(bookTitle),view.width, view.height))
     }
     fun addSticker(bitmap: Bitmap):Sticker{
-        var ret= bookModel.currentPage?.addSticker(bitmap)
+        var ret= bookModel.addSticker(bitmap)
         view.stickerList=bookModel.currentPage.stickerList.toTypedArray()
         return ret
+    }
+    fun move(sticker:Sticker,point: Point):Sticker
+    {
+        return bookModel.move(sticker,point)
     }
 
 

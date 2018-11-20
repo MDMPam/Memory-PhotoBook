@@ -10,6 +10,7 @@ interface DisplayView {
     var width:Int
     var height: Int
     var stickerList:Array<Sticker>
+    var textList:Array<Text>
     var imageList:Array<Image>
 
     var availableSticker:Array<Bitmap>

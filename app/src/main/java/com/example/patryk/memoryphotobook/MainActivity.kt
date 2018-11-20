@@ -6,21 +6,17 @@ import android.graphics.Point
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
-import android.text.Layout
 import android.view.View
 import android.widget.Button
 import com.example.patryk.memoryphotobook.BooksModel.DisplayView
 
 import com.example.patryk.memoryphotobook.BooksModel.Image
 import com.example.patryk.memoryphotobook.BooksModel.Sticker
-import android.widget.RelativeLayout
-import com.example.patryk.memoryphotobook.view.DisplayedSticker
-import android.view.View.DragShadowBuilder
-import android.content.ClipData
+import com.example.patryk.memoryphotobook.view.StickerView
 import android.view.MotionEvent
-import android.view.View.OnTouchListener
 
-
+import com.example.patryk.memoryphotobook.BooksModel.Text
+import com.example.patryk.memoryphotobook.view.TextView
 
 
 class MainActivity : AppCompatActivity(),DisplayView {
@@ -54,12 +50,22 @@ class MainActivity : AppCompatActivity(),DisplayView {
             field=value
             val rl = findViewById<ConstraintLayout>(R.id.mainLayout)
             value.forEach {
-                var view =DisplayedSticker(this,it)
+                var view =StickerView(this,it)
                 //view.setOnTouchListener(MyTouchListener())
                 rl.addView(view)
             }
           //  setContentView(rl)
            // rl.invalidate()
+        }
+    override var textList: Array<Text> = arrayOf()
+        set(value) {
+            field=value
+            val rl = findViewById<ConstraintLayout>(R.id.mainLayout)
+            value.forEach {
+                var view = TextView(this,it)
+               // view.setOnTouchListener(MyTouchListener())
+                rl.addView(view)
+            }
         }
     lateinit var presenter:DisplayPresenter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +74,9 @@ class MainActivity : AppCompatActivity(),DisplayView {
         presenter= DisplayPresenter(this,"title")
         findViewById<Button>(R.id.button_createSticker).setOnClickListener {
             presenter.move(presenter.addSticker(availableSticker[0]),Point(500,50))
+        }
+        findViewById<Button>(R.id.button_createText).setOnClickListener {
+            presenter.move(presenter.addText("ZÓŁĆ"),Point(50,50))
         }
     }
 

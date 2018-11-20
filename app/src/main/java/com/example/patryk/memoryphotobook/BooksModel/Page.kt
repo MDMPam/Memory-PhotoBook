@@ -2,6 +2,7 @@ package com.example.patryk.memoryphotobook.BooksModel
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Paint
 
 class Page(
     val backgroundColor: Color
@@ -20,9 +21,10 @@ class Page(
     }
 
     fun addText(text:String):Text{
-        var text=Text(text)
-        textList.add(text)
-        return text
+        var ret=Text(text)
+        ret.createBitmap()
+        textList.add(ret)
+        return ret
     }
 
     fun addRichImage(source:Bitmap):RichImage{

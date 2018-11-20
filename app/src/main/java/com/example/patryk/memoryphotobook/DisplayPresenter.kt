@@ -21,6 +21,15 @@ class DisplayPresenter(var view:DisplayView, bookTitle:String) {
         view.stickerList=bookModel.currentPage.stickerList.toTypedArray()
         return ret
     }
+    fun addText(text:String):Text{
+        var ret= bookModel.addText(text)
+        view.textList=bookModel.currentPage.textList.toTypedArray()
+        return ret
+    }
+    fun move(text:Text,point: Point):Text
+    {
+        return bookModel.move(text,point)
+    }
     fun move(sticker:Sticker,point: Point):Sticker
     {
         return bookModel.move(sticker,point)

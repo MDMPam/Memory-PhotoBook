@@ -1,6 +1,11 @@
 package com.example.patryk.memoryphotobook.BooksModel
 
-class Sticker:Image() {
+import android.graphics.Bitmap
+
+class Sticker(source:Bitmap):Image() {
+    init {
+        bitmap=source
+    }
     override fun createBitmap() {
 
     }

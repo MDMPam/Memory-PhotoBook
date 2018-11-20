@@ -3,7 +3,7 @@ package com.example.patryk.memoryphotobook.BooksModel
 import android.graphics.Bitmap
 import android.graphics.Canvas
 
-class RIchImage(source:Bitmap):Image() {
+class RichImage(source:Bitmap):Image() {
     var sourceBitmap:Bitmap=source
     var shape:PictureShape=PictureShape.None
     var filter:ColorFilter=ColorFilter.None

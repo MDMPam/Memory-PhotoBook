@@ -11,7 +11,8 @@ interface DisplayView {
     var height: Int
     var stickerList:Array<Sticker>
     var textList:Array<Text>
-    var imageList:Array<Image>
+    var imageList:Array<RichImage>
+    var frameList:Array<Frame>
 
     var availableSticker:Array<Bitmap>
 }

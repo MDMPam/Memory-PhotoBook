@@ -8,14 +8,12 @@ import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.view.View
 import android.widget.Button
-import com.example.patryk.memoryphotobook.BooksModel.DisplayView
 
-import com.example.patryk.memoryphotobook.BooksModel.Image
-import com.example.patryk.memoryphotobook.BooksModel.Sticker
 import com.example.patryk.memoryphotobook.view.StickerView
 import android.view.MotionEvent
+import com.example.patryk.memoryphotobook.BooksModel.*
+import com.example.patryk.memoryphotobook.view.RichImageView
 
-import com.example.patryk.memoryphotobook.BooksModel.Text
 import com.example.patryk.memoryphotobook.view.TextView
 
 
@@ -23,9 +21,17 @@ class MainActivity : AppCompatActivity(),DisplayView {
 
     override var availableSticker: Array<Bitmap> = arrayOf()
 
-    override var imageList: Array<Image> = arrayOf()
-       // get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
+    override var imageList: Array<RichImage> = arrayOf()
+        set(value) {
+            field=value
+            val rl = findViewById<ConstraintLayout>(R.id.mainLayout)
+            value.forEach {
+                var view = RichImageView(this, it)
+                // view.setOnTouchListener(MyTouchListener())
+                rl.addView(view)
+            }
+        }
+    override var frameList: Array<Frame> = arrayOf()
 
 
     override var context: Context
@@ -77,6 +83,9 @@ class MainActivity : AppCompatActivity(),DisplayView {
         }
         findViewById<Button>(R.id.button_createText).setOnClickListener {
             presenter.move(presenter.addText("ZÓŁĆ"),Point(50,50))
+        }
+        findViewById<Button>(R.id.button_RichImage).setOnClickListener {
+            presenter.setframe(presenter.move(presenter.addRichImage(availableSticker[0]),Point(50,0)),frameList[0])
         }
     }
 

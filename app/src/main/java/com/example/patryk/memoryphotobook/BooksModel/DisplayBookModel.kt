@@ -28,6 +28,16 @@ class DisplayBookModel(var book:Book) {
     fun addText(text: String):Text{
         return book.addText(text,currentPage)
     }
+
+    fun addRichImage(src:Bitmap):RichImage
+    {
+        return book.addRichImage(src,currentPage)
+    }
+
+    fun move(richImage: RichImage, p: Point):RichImage
+    {
+        return book.move(richImage,p)
+    }
     fun move(text:Text,p: Point):Text
     {
         return book.move(text,p)
@@ -35,6 +45,12 @@ class DisplayBookModel(var book:Book) {
     fun move(stick:Sticker,p: Point):Sticker
     {
         return book.move(stick,p)
+    }
+    fun setFrame(img:RichImage,frame:Frame?):RichImage
+    {
+        img.frame=frame
+        img.createBitmap()
+        return img
     }
 
 

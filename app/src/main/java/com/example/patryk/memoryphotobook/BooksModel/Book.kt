@@ -31,6 +31,18 @@ class Book(
     fun addText(text:String,page:Page):Text{
         return page.addText(text)
     }
+
+    fun addRichImage(src:Bitmap,page: Page):RichImage
+    {
+        return page.addRichImage(src)
+    }
+
+    fun move(richImage: RichImage,p:Point):RichImage
+    {
+        richImage.possition=p
+        return richImage
+    }
+
     fun move(text:Text,p:Point):Text
     {
         text.possition= p

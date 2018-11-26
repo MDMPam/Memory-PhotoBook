@@ -24,9 +24,7 @@ class StickerView(view:MainActivity, var sticker:Sticker):ImageView(view.context
 
         setImageBitmap(sticker.bitmap)
         setOnTouchListener(MyTouchListener(view,this))
-        //this.setOnDragListener(StickerOnDragListener(this))
-        //this.setOnLongClickListener(StickerLongClickListener(this))
-        //this.setOnTouchListener(MyTouchListener(this))
+
     }
     override fun onDraw(canvas: Canvas?) {
         //setImageBitmap(sticker.bitmap)

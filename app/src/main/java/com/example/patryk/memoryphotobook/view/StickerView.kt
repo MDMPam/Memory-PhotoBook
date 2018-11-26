@@ -7,115 +7,71 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.util.Log
 import android.view.DragEvent
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import com.example.patryk.memoryphotobook.BooksModel.DisplayView
 import com.example.patryk.memoryphotobook.BooksModel.Sticker
+import com.example.patryk.memoryphotobook.MainActivity
 
-class StickerView(context:Context, var sticker:Sticker):ImageView(context) {
+class StickerView(view:MainActivity, var sticker:Sticker):ImageView(view.context) {
+    var movable=false
     init {
 
         setImageBitmap(sticker.bitmap)
-        this.setOnDragListener(StickerOnDragListener(this))
-        this.setOnLongClickListener(StickerLongClickListener())
+        setOnTouchListener(MyTouchListener(view,this))
+        //this.setOnDragListener(StickerOnDragListener(this))
+        //this.setOnLongClickListener(StickerLongClickListener(this))
+        //this.setOnTouchListener(MyTouchListener(this))
     }
     override fun onDraw(canvas: Canvas?) {
-        setImageBitmap(sticker.bitmap)
+        //setImageBitmap(sticker.bitmap)
         x=sticker.possition.x.toFloat()
         y=sticker.possition.y.toFloat()
+        clearAnimation()
         super.onDraw(canvas)
     }
-
-    private class MyDragShadowBuilder(v: View) : View.DragShadowBuilder(v) {
-
-        private val shadow = ColorDrawable(Color.LTGRAY)
-        override fun onProvideShadowMetrics(size: Point, touch: Point) {
-            val width: Int = view.width / 2
-            val height: Int = view.height / 2
-            shadow.setBounds(0, 0, width, height)
-            touch.set(width / 2, height / 2)
-        }
-        override fun onDrawShadow(canvas: Canvas) {
-            // Draws the ColorDrawable in the Canvas passed in from the system.
-            shadow.draw(canvas)
-        }
-    }
-
-    class StickerOnDragListener(var view:StickerView):View.OnDragListener
-    {
-        override fun onDrag(v: View?, event: DragEvent?): Boolean {
-            // Handles each of the expected events
-            when (event?.action) {
-                DragEvent.ACTION_DRAG_STARTED -> {
-                    // Determines if this View can accept the dragged data
-                    if (event?.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                          view.visibility=View.INVISIBLE
-                        v?.invalidate()
-                        true
-                    } else {
-                        false
-                    }
+    class MyTouchListener(var view:MainActivity,var sticker:StickerView) : View.OnTouchListener {
+        var dX: Float = 0.toFloat()
+        var dY:Float = 0.toFloat()
+        override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
+            val X = motionEvent.getRawX().toInt()
+            val Y = motionEvent.getRawY().toInt()
+            when (motionEvent.getAction() and MotionEvent.ACTION_MASK) {
+                MotionEvent.ACTION_DOWN -> {
+                    dX = view.getX() - motionEvent.getRawX();
+                    dY = view.getY() - motionEvent.getRawY();
+                    return true
                 }
-                DragEvent.ACTION_DRAG_ENTERED -> {
-                    true
+                MotionEvent.ACTION_UP -> {
+                    return true
                 }
-                DragEvent.ACTION_DRAG_LOCATION ->
-                    true
-                DragEvent.ACTION_DRAG_EXITED -> {
-                    true
+                MotionEvent.ACTION_POINTER_DOWN -> {
+                    return true
                 }
-                DragEvent.ACTION_DROP -> {
-                    true
+                MotionEvent.ACTION_POINTER_UP -> {
+                    return true
                 }
+                MotionEvent.ACTION_MOVE -> {
 
-                DragEvent.ACTION_DRAG_ENDED -> {
-                    view.sticker.possition = Point(0, 0)
-                    v?.visibility = View.VISIBLE
-                    // Turns off any color tinting
-                    (v as? ImageView)?.clearColorFilter()
-
-                    // Invalidates the view to force a redraw
-                    v?.invalidate()
-
-                    // Does a getResult(), and displays what happened.
-
-
-                    // returns true; the value is ignored.
-                    true
-                }
-                else -> {
-                    // An unknown action type was received.
-                    Log.e("DragDrop Example", "Unknown action type received by OnDragListener.")
-                    false
+                    view.animate()
+                        .x(motionEvent.getRawX() + dX)
+                        .y(motionEvent.getRawY() + dY)
+                        .setDuration(0)
+                        .start()
+                    this.view.presenter.move(sticker.sticker,Point(motionEvent.getRawX().toInt() + dX.toInt(),motionEvent.getRawY().toInt() + dY.toInt()))
                 }
             }
+            //_root.invalidate()
+            return false
 
-        return true
-    }
-    }
-
-    class StickerLongClickListener():View.OnLongClickListener
-    {
-        override fun onLongClick(v: View?): Boolean {
-            val item = ClipData.Item(v?.tag as? CharSequence)
-            val dragData = ClipData(
-                v?.tag as? CharSequence,
-                arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
-                item)
-            val myShadow = StickerView.MyDragShadowBuilder(v!!)
-
-            // Starts the drag
-            v?.startDrag(
-                dragData,   // the data to be dragged
-                myShadow,   // the drag shadow builder
-                null,       // no need to use local data
-                0           // flags (not currently used, set to 0)
-            )
-            return true
         }
     }
+
 }
 
 

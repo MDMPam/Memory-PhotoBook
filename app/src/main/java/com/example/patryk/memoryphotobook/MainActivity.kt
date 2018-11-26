@@ -24,12 +24,8 @@ class MainActivity : AppCompatActivity(),DisplayView {
     override var imageList: Array<RichImage> = arrayOf()
         set(value) {
             field=value
-            val rl = findViewById<ConstraintLayout>(R.id.mainLayout)
-            value.forEach {
-                var view = RichImageView(this, it)
-                // view.setOnTouchListener(MyTouchListener())
-                rl.addView(view)
-            }
+            displayLayout.removeAllViews()
+            drawAllList()
         }
     override var frameList: Array<Frame> = arrayOf()
 
@@ -54,25 +50,37 @@ class MainActivity : AppCompatActivity(),DisplayView {
     override var stickerList: Array<Sticker> = arrayOf()
         set(value) {
             field=value
-            val rl = findViewById<ConstraintLayout>(R.id.mainLayout)
-            value.forEach {
-                var view =StickerView(this,it)
-                //view.setOnTouchListener(MyTouchListener())
-                rl.addView(view)
-            }
-          //  setContentView(rl)
-           // rl.invalidate()
+            displayLayout.removeAllViews()
+            drawAllList()
         }
     override var textList: Array<Text> = arrayOf()
         set(value) {
             field=value
-            val rl = findViewById<ConstraintLayout>(R.id.mainLayout)
-            value.forEach {
-                var view = TextView(this,it)
-               // view.setOnTouchListener(MyTouchListener())
-                rl.addView(view)
-            }
+            displayLayout.removeAllViews()
+            drawAllList()
         }
+    fun drawAllList()
+    {
+        textList.forEach {
+            var view = TextView(this,it)
+            view.elevation=50.toFloat()
+            // view.setOnTouchListener(MyTouchListener())
+            displayLayout.addView(view)
+
+        }
+        stickerList.forEach {
+            var view =StickerView(this,it)
+            //view.setOnTouchListener(MyTouchListener())
+            displayLayout.addView(view)
+        }
+
+        imageList.forEach {
+            var view = RichImageView(this, it)
+            // view.setOnTouchListener(MyTouchListener())
+            displayLayout.addView(view)
+        }
+    }
+    lateinit var displayLayout:ConstraintLayout
     lateinit var presenter:DisplayPresenter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,6 +95,7 @@ class MainActivity : AppCompatActivity(),DisplayView {
         findViewById<Button>(R.id.button_RichImage).setOnClickListener {
             presenter.setframe(presenter.move(presenter.addRichImage(availableSticker[0]),Point(50,0)),frameList[0])
         }
+        displayLayout = findViewById<ConstraintLayout>(R.id.imageLayout)
     }
 
 

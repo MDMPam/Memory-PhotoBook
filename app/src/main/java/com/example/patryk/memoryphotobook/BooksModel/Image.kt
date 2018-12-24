@@ -9,6 +9,7 @@ abstract class Image {
     var possition:Point=Point(0,0)
     var wight:Int=0
     var height:Int=0
+    var level:Int=1
 
     abstract fun createBitmap()
 }

@@ -62,22 +62,21 @@ class MainActivity : AppCompatActivity(),DisplayView {
     fun drawAllList()
     {
         textList.forEach {
-            var view = TextView(this,it)
-            view.elevation=50.toFloat()
+           // var view = TextView(this,it)
             // view.setOnTouchListener(MyTouchListener())
-            displayLayout.addView(view)
+           // displayLayout.addView(view)
 
         }
         stickerList.forEach {
-            var view =StickerView(this,it)
+          //  var view =StickerView(this,it)
             //view.setOnTouchListener(MyTouchListener())
-            displayLayout.addView(view)
+           // displayLayout.addView(view)
         }
 
         imageList.forEach {
-            var view = RichImageView(this, it)
+          //  var view = RichImageView(this, it)
             // view.setOnTouchListener(MyTouchListener())
-            displayLayout.addView(view)
+           // displayLayout.addView(view)
         }
     }
     lateinit var displayLayout:ConstraintLayout

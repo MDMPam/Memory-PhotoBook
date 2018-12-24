@@ -50,5 +50,15 @@ class DisplayPresenter(var view:DisplayView, bookTitle:String) {
         return bookModel.setFrame(img,frame)
     }
 
+    fun incLevel(image:Image)
+    {
+        bookModel.incLevel(image)
+    }
+
+    fun decLevel(image:Image)
+    {
+        bookModel.decLevel(image)
+    }
+
 
 }

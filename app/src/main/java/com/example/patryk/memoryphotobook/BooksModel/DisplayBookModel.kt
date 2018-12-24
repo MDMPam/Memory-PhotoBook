@@ -52,6 +52,18 @@ class DisplayBookModel(var book:Book) {
         img.createBitmap()
         return img
     }
+    fun setLevel(image:Image,level:Int)
+    {
+        image.level=level
+    }
+    fun incLevel(image:Image)
+    {
+        setLevel(image,image.level+1)
+    }
+    fun decLevel(image:Image)
+    {
+        setLevel(image,image.level-1)
+    }
 
 
 

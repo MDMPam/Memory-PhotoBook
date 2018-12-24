@@ -18,22 +18,22 @@ import com.example.patryk.memoryphotobook.BooksModel.DisplayView
 import com.example.patryk.memoryphotobook.BooksModel.Sticker
 import com.example.patryk.memoryphotobook.MainActivity
 
-class StickerView(view:MainActivity, var sticker:Sticker):ImageView(view.context) {
+class StickerView(view:EditBookView, var sticker:Sticker):ImageView(view.context) {
     var movable=false
     init {
-
+        elevation=sticker.level.toFloat()
         setImageBitmap(sticker.bitmap)
         setOnTouchListener(MyTouchListener(view,this))
 
     }
     override fun onDraw(canvas: Canvas?) {
-        //setImageBitmap(sticker.bitmap)
+        //setImageBitmap(richImage.bitmap)
         x=sticker.possition.x.toFloat()
         y=sticker.possition.y.toFloat()
         clearAnimation()
         super.onDraw(canvas)
     }
-    class MyTouchListener(var view:MainActivity,var sticker:StickerView) : View.OnTouchListener {
+    private class MyTouchListener(var view:EditBookView,var sticker:StickerView) : View.OnTouchListener {
         var dX: Float = 0.toFloat()
         var dY:Float = 0.toFloat()
         override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {

@@ -1,35 +1,36 @@
 package com.example.patryk.memoryphotobook.view.ImageListView
 
-import android.content.Context
-import android.graphics.Canvas
-import android.view.View
-import android.widget.ImageView
-import com.example.patryk.memoryphotobook.BooksModel.Frame
 import android.content.ClipData
 import android.content.ClipDescription
-import android.graphics.Color
-import android.widget.Toast
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.view.View
+import android.widget.ImageView
+import com.example.patryk.memoryphotobook.BooksModel.CFilter
+import com.example.patryk.memoryphotobook.BooksModel.Frame
+import com.example.patryk.memoryphotobook.view.EditView.EditBookView
 
-import android.view.DragEvent
-import android.widget.LinearLayout
-import android.view.ViewGroup
-import android.graphics.PorterDuff
-import android.util.Log
-
-
-class SingleFrameListElement(context:Context,var frame: Frame): ImageView(context) {
+class SingleFilterListElement(var editView: EditBookView, var filter: CFilter): ImageView(editView) {
 
     companion object {
-        const val DataDesc="SingleFrameElement"
+        const val DataDesc="SingleFilterElement"
     }
     init {
-        setImageBitmap(frame.bitMap)
+        var paint=Paint()
+        paint.colorFilter=filter.filter
+        val bmOverlay = Bitmap.createBitmap(editView.defaultImage.width, editView.defaultImage.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bmOverlay)
+        canvas.drawBitmap(editView.defaultImage, Matrix(), paint)
+        setImageBitmap(bmOverlay)
         setOnLongClickListener(MyLongClick())
     }
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
     }
-    class MyLongClick:View.OnLongClickListener
+    class MyLongClick: View.OnLongClickListener
     {
         override fun onLongClick(v: View): Boolean {
             // Create a new ClipData.Item from the ImageView object's tag

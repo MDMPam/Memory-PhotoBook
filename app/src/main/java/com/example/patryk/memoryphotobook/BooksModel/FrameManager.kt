@@ -10,5 +10,16 @@ class FrameManager(var context: Context) {
     ,Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
         Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
         Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
+        Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
+        Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
+        Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
+        Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
+        Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
+        Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
+        Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
+        Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
+        Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
+        Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
+        Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)),
         Frame(BitmapFactory.decodeResource(context.resources, R.drawable.frame)))
 }

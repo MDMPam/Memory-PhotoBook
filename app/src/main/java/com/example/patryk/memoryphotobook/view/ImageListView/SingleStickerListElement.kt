@@ -1,35 +1,27 @@
 package com.example.patryk.memoryphotobook.view.ImageListView
 
+import android.content.ClipData
+import android.content.ClipDescription
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.view.View
 import android.widget.ImageView
 import com.example.patryk.memoryphotobook.BooksModel.Frame
-import android.content.ClipData
-import android.content.ClipDescription
-import android.graphics.Color
-import android.widget.Toast
 
-import android.view.DragEvent
-import android.widget.LinearLayout
-import android.view.ViewGroup
-import android.graphics.PorterDuff
-import android.util.Log
-
-
-class SingleFrameListElement(context:Context,var frame: Frame): ImageView(context) {
+class SingleStickerListElement (context: Context, var sticker:Bitmap): ImageView(context) {
 
     companion object {
-        const val DataDesc="SingleFrameElement"
+        const val DataDesc="SingleStickerElement"
     }
     init {
-        setImageBitmap(frame.bitMap)
+        setImageBitmap(sticker)
         setOnLongClickListener(MyLongClick())
     }
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
     }
-    class MyLongClick:View.OnLongClickListener
+    class MyLongClick: View.OnLongClickListener
     {
         override fun onLongClick(v: View): Boolean {
             // Create a new ClipData.Item from the ImageView object's tag

@@ -32,5 +32,17 @@ class Page(
         richImageList.add(image)
         return image
     }
+    fun remove(richImage: RichImage)
+    {
+        richImageList.remove(richImage)
+    }
+    fun remove(text: Text)
+    {
+        textList.remove(text)
+    }
+    fun remove(sticker: Sticker)
+    {
+        stickerList.remove(sticker)
+    }
 
 }

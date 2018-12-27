@@ -2,38 +2,57 @@ package com.example.patryk.memoryphotobook.view
 
 import android.content.ClipData
 import android.content.ClipDescription
-import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Point
-import android.graphics.drawable.ColorDrawable
-import android.os.Build
-import android.util.Log
-import android.view.DragEvent
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
-import android.widget.Toast
-import com.example.patryk.memoryphotobook.BooksModel.DisplayView
 import com.example.patryk.memoryphotobook.BooksModel.Sticker
-import com.example.patryk.memoryphotobook.MainActivity
+import com.example.patryk.memoryphotobook.view.EditView.EditBookView
 
-class StickerView(view:EditBookView, var sticker:Sticker):ImageView(view.context) {
+class StickerView(view: EditBookView, var sticker:Sticker):ImageView(view.context) {
     var movable=false
+    companion object {
+        const val DataDesc="StickerView"
+    }
     init {
         elevation=sticker.level.toFloat()
         setImageBitmap(sticker.bitmap)
-        setOnTouchListener(MyTouchListener(view,this))
+        setOnLongClickListener(StickerLongClick())
+        setImageBitmap(sticker.bitmap)
 
     }
     override fun onDraw(canvas: Canvas?) {
-        //setImageBitmap(richImage.bitmap)
+        setImageBitmap(sticker.bitmap)
         x=sticker.possition.x.toFloat()
         y=sticker.possition.y.toFloat()
-        clearAnimation()
+        //clearAnimation()
         super.onDraw(canvas)
     }
-    private class MyTouchListener(var view:EditBookView,var sticker:StickerView) : View.OnTouchListener {
+
+    class StickerLongClick:View.OnLongClickListener
+    {
+        override fun onLongClick(v: View): Boolean {
+            // Create a new ClipData.Item from the ImageView object's tag
+            val item = ClipData.Item(DataDesc)
+            // Create a new ClipData using the tag as a label, the plain text MIME type, and
+            // the already-created item. This will create a new ClipDescription object within the
+            // ClipData, and set its MIME type entry to "text/plain"
+            val mimeTypes = arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN)
+            val data = ClipData("tag", mimeTypes, item)
+            // Instantiates the drag shadow builder.
+            val dragshadow = View.DragShadowBuilder(v)
+            // Starts the drag
+            v.startDrag(
+                data        // data to be dragged
+                , dragshadow   // drag shadow builder
+                , v           // local data about the drag and drop operation
+                , 0          // flags (not currently used, set to 0)
+            )
+            return true
+        }
+    }
+    private class MyTouchListener(var view: EditBookView, var sticker:StickerView) : View.OnTouchListener {
         var dX: Float = 0.toFloat()
         var dY:Float = 0.toFloat()
         override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {

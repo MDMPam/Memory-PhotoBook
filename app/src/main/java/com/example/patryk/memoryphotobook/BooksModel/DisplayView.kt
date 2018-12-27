@@ -13,7 +13,9 @@ interface DisplayView {
     var textList:Array<Text>
     var imageList:Array<RichImage>
 
-    var frameList:Array<Frame>
+    var avalibleFrame:Array<Frame>
 
     var availableSticker:Array<Bitmap>
+    var avalblePhotoLst:Array<Bitmap>
+    var avalibleFilterr:Array<CFilter>
 }

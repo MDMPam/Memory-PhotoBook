@@ -23,15 +23,15 @@ class DisplayBookModel(var book:Book) {
                         else book.pageList[currentPageNumber]
     }
     fun addSticker(bitmap: Bitmap):Sticker{
-        return book.addSticker(bitmap,currentPage)
+        return book.addSticker(bitmap,currentPage).also { it.resize(270,120) }
     }
     fun addText(text: String):Text{
-        return book.addText(text,currentPage)
+        return book.addText(text,currentPage).also { it.resize(270,120) }
     }
 
     fun addRichImage(src:Bitmap):RichImage
     {
-        return book.addRichImage(src,currentPage)
+        return book.addRichImage(src,currentPage).also { it.resize(270,120) }
     }
 
     fun move(richImage: RichImage, p: Point):RichImage
@@ -45,6 +45,25 @@ class DisplayBookModel(var book:Book) {
     fun move(stick:Sticker,p: Point):Sticker
     {
         return book.move(stick,p)
+    }
+    fun remove(richImage: RichImage)
+    {
+        book.remove(richImage,currentPage)
+    }
+    fun remove(text: Text)
+    {
+        book.remove(text,currentPage)
+    }
+    fun remove(stick: Sticker)
+    {
+        book.remove(stick,currentPage)
+    }
+
+    fun setFilter(img:RichImage,filter:CFilter):RichImage
+    {
+        img.filter=filter.filter
+        img.createBitmap()
+        return  img
     }
     fun setFrame(img:RichImage,frame:Frame?):RichImage
     {

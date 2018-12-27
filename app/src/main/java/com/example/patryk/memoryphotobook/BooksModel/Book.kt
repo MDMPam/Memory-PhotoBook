@@ -24,6 +24,16 @@ class Book(
         pageList.add(page)
     }
 
+    fun remove(richImage: RichImage,page: Page){
+        page.remove(richImage)
+    }
+    fun remove(text: Text,page: Page){
+        page.remove(text)
+    }
+    fun remove(stick: Sticker,page: Page){
+        page.remove(stick)
+    }
+
     fun addSticker(src:Bitmap,page:Page):Sticker{
         return page.addSticker(src)
     }
@@ -37,11 +47,17 @@ class Book(
         return page.addRichImage(src)
     }
 
+    fun setFilter(image:RichImage,filter:CFilter)
+    {
+        image.filter=filter.filter
+    }
+
     fun move(richImage: RichImage,p:Point):RichImage
     {
         richImage.possition=p
         return richImage
     }
+
 
     fun move(text:Text,p:Point):Text
     {

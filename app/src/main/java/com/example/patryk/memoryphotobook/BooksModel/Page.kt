@@ -5,7 +5,8 @@ import android.graphics.Color
 import android.graphics.Paint
 
 class Page(
-    val backgroundColor: Color
+
+    var backgroundColor: Int
 ) {
     val stickerList:MutableList<Sticker> = mutableListOf()
     val textList:MutableList<Text> = mutableListOf()

@@ -17,40 +17,56 @@ class RichImage(source:Bitmap):Image() {
     var shape:PictureShape=PictureShape.None
     var filter:PorterDuffColorFilter?=null
 
+    var baseW:Int
+    var baseH:Int
+
+     var resizedHeight:Int=source.height
+     var resizedWidth=source.width
     init {
+        baseH=source.height
+        baseW=source.width
         bitmap=sourceBitmap
     }
 
-
-
     private var colorFilter:ColorFilter?=null
     override fun createBitmap() {
+        val bmOverlay = Bitmap.createBitmap(resizedWidth, resizedHeight, Bitmap.Config.ARGB_8888)
+        drawImage(bmOverlay)
+        drawFrame(bmOverlay)
+        bitmap=bmOverlay
+    }
+    private fun drawImage(bmOverlay:Bitmap)
+    {
         var paint: Paint?=null
-
         if(filter!=null)
         {
             paint=Paint()
             paint?.colorFilter=filter
         }
 
-        if(frame!=null) {
-            val bmOverlay = Bitmap.createBitmap(sourceBitmap.width, sourceBitmap.height, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bmOverlay)
-            canvas.drawBitmap(sourceBitmap, Matrix(), paint)
+        val canvas = Canvas(bmOverlay)
+        canvas.drawBitmap(Bitmap.createScaledBitmap(sourceBitmap, resizedWidth, resizedHeight, false), Matrix(), paint)
+    }
 
-            canvas.drawBitmap(Bitmap.createScaledBitmap((frame as Frame).bitMap, sourceBitmap.width, sourceBitmap.height, false), 0.toFloat(), 0.toFloat(), null)
-            bitmap= bmOverlay
-        }
-        else {
-            val bmOverlay = Bitmap.createBitmap(sourceBitmap.width, sourceBitmap.height, Bitmap.Config.ARGB_8888)
+    private fun drawFrame(bmOverlay: Bitmap)
+    {
+        if(frame!=null) {
             val canvas = Canvas(bmOverlay)
-            canvas.drawBitmap(sourceBitmap, Matrix(), paint)
-            bitmap = bmOverlay
+            canvas.drawBitmap(
+                Bitmap.createScaledBitmap(
+                    (frame as Frame).bitMap,
+                    resizedWidth,
+                    resizedHeight,
+                    false
+                ), 0.toFloat(), 0.toFloat(), null
+            )
         }
     }
-    private fun drawFrame(img:Bitmap):Bitmap
-    {
-        return img
+
+    override fun resize(width: Int, height: Int) {
+        resizedWidth=width
+        resizedHeight=height
+        createBitmap()
     }
 
     private fun drawShape(img:Bitmap):Bitmap

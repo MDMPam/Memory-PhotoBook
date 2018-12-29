@@ -7,13 +7,24 @@ import android.graphics.Point
 class DisplayBookModel(var book:Book) {
     var currentPage=book.coverPage
     private var currentPageNumber:Int=-1
+    var defaultBackgroundColor:Int
+        get() {return book.defaultBackgrounColor}
+        set(value) {book.defaultBackgrounColor=value}
+    var backgroundColor:Int
+        get() {return currentPage.backgroundColor}
+        set(value) {currentPage.backgroundColor=value}
+
     fun nextPage()
     {
-        if(book.pageList.size< currentPageNumber -1)
+        if(!(book.pageList.size< currentPageNumber -1))
         {
-            currentPageNumber++
-            currentPage=book.pageList[currentPageNumber]
+         book.addPage()
         }
+
+        currentPageNumber++
+        currentPage=book.pageList[currentPageNumber]
+
+
     }
     fun previousPage()
     {
@@ -83,6 +94,7 @@ class DisplayBookModel(var book:Book) {
     {
         setLevel(image,image.level-1)
     }
+
 
 
 

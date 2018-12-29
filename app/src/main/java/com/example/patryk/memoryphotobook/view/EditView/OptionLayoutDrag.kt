@@ -3,11 +3,10 @@ package com.example.patryk.memoryphotobook.view.EditView
 import android.content.ClipDescription
 import android.view.DragEvent
 import android.view.View
-import android.view.ViewGroup
 import com.example.patryk.memoryphotobook.view.ImageListView.SingleFrameListElement
-import com.example.patryk.memoryphotobook.view.RichImageView
-import com.example.patryk.memoryphotobook.view.StickerView
-import com.example.patryk.memoryphotobook.view.TextView
+import com.example.patryk.memoryphotobook.view.EditView.ImageView.RichImageView
+import com.example.patryk.memoryphotobook.view.EditView.ImageView.StickerView
+import com.example.patryk.memoryphotobook.view.EditView.ImageView.TextView
 import java.lang.Exception
 
 class OptionLayoutDrag (var view: EditBookView): View.OnDragListener
@@ -67,7 +66,7 @@ class OptionLayoutDrag (var view: EditBookView): View.OnDragListener
         }
         return false
     }
-    private fun richImageCase(richImage:RichImageView, event:DragEvent)
+    private fun richImageCase(richImage: RichImageView, event:DragEvent)
     {
         view.presenter.remove(richImage.richImage)
     }

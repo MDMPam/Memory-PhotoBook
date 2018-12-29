@@ -1,4 +1,4 @@
-package com.example.patryk.memoryphotobook.BooksModel
+package com.example.patryk.memoryphotobook.BooksModel.managers
 
 import android.content.Context
 import android.graphics.Bitmap

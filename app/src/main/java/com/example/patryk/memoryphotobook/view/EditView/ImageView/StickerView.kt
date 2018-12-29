@@ -1,38 +1,56 @@
-package com.example.patryk.memoryphotobook.view
+package com.example.patryk.memoryphotobook.view.EditView.ImageView
 
 import android.content.ClipData
 import android.content.ClipDescription
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Point
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
+import com.example.patryk.memoryphotobook.BooksModel.Image
 import com.example.patryk.memoryphotobook.BooksModel.Sticker
 import com.example.patryk.memoryphotobook.view.EditView.EditBookView
 
-class StickerView(view: EditBookView, var sticker:Sticker):ImageView(view.context) {
+class StickerView(var view: EditBookView, var sticker:Sticker):ImageView(view.context),IObjectView {
     var movable=false
     companion object {
         const val DataDesc="StickerView"
     }
+
+    override var highlighted: Boolean = false
+    override var image: Image
+        get() = sticker
+        set(value) {}
+
+    override fun reSize(scale: Float) {
+        sticker.resize((sticker.baseW*scale).toInt(),(sticker.baseH*scale).toInt())
+    }
     init {
         elevation=sticker.level.toFloat()
         setImageBitmap(sticker.bitmap)
-        setOnLongClickListener(StickerLongClick())
+        setOnLongClickListener(StickerLongClick(view))
+        setOnTouchListener(MyTouchListener(view,this))
         setImageBitmap(sticker.bitmap)
 
     }
     override fun onDraw(canvas: Canvas?) {
+        this.elevation=image.level.toFloat()
         setImageBitmap(sticker.bitmap)
         x=sticker.possition.x.toFloat()
         y=sticker.possition.y.toFloat()
         //clearAnimation()
+
         super.onDraw(canvas)
+        if (view.selected==sticker)
+            canvas?.drawCircle(10.toFloat(),10F,10F, Paint().also { it.color= Color.GREEN })
     }
 
-    class StickerLongClick:View.OnLongClickListener
+    class StickerLongClick(var view:EditBookView):View.OnLongClickListener
     {
         override fun onLongClick(v: View): Boolean {
+            view.selected=(v as StickerView).sticker
             // Create a new ClipData.Item from the ImageView object's tag
             val item = ClipData.Item(DataDesc)
             // Create a new ClipData using the tag as a label, the plain text MIME type, and
@@ -52,36 +70,15 @@ class StickerView(view: EditBookView, var sticker:Sticker):ImageView(view.contex
             return true
         }
     }
-    private class MyTouchListener(var view: EditBookView, var sticker:StickerView) : View.OnTouchListener {
-        var dX: Float = 0.toFloat()
-        var dY:Float = 0.toFloat()
+    private class MyTouchListener(var view: EditBookView, var sticker: StickerView) : View.OnTouchListener {
         override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-            val X = motionEvent.getRawX().toInt()
-            val Y = motionEvent.getRawY().toInt()
+
             when (motionEvent.getAction() and MotionEvent.ACTION_MASK) {
                 MotionEvent.ACTION_DOWN -> {
-                    dX = view.getX() - motionEvent.getRawX();
-                    dY = view.getY() - motionEvent.getRawY();
-                    return true
+                  this.view.selected=sticker.sticker
+                    return false
                 }
-                MotionEvent.ACTION_UP -> {
-                    return true
-                }
-                MotionEvent.ACTION_POINTER_DOWN -> {
-                    return true
-                }
-                MotionEvent.ACTION_POINTER_UP -> {
-                    return true
-                }
-                MotionEvent.ACTION_MOVE -> {
 
-                    view.animate()
-                        .x(motionEvent.getRawX() + dX)
-                        .y(motionEvent.getRawY() + dY)
-                        .setDuration(0)
-                        .start()
-                    this.view.presenter.move(sticker.sticker,Point(motionEvent.getRawX().toInt() + dX.toInt(),motionEvent.getRawY().toInt() + dY.toInt()))
-                }
             }
             //_root.invalidate()
             return false

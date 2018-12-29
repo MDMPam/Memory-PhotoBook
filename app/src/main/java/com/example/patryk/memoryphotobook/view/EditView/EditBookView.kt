@@ -1,38 +1,48 @@
 package com.example.patryk.memoryphotobook.view.EditView
 
-import android.app.AlertDialog
-import android.app.Dialog
-import android.app.DialogFragment
-import android.content.ClipDescription
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Point
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.view.DragEvent
-import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.LinearLayout
 import com.example.patryk.memoryphotobook.BooksModel.*
 import com.example.patryk.memoryphotobook.DisplayPresenter
 import com.example.patryk.memoryphotobook.R
-import com.example.patryk.memoryphotobook.view.ImageListView.SingleFilterListElement
-import com.example.patryk.memoryphotobook.view.ImageListView.SingleFrameListElement
-import com.example.patryk.memoryphotobook.view.ImageListView.SinglePhotoListElement
-import com.example.patryk.memoryphotobook.view.ImageListView.SingleStickerListElement
-import com.example.patryk.memoryphotobook.view.RichImageView
-import com.example.patryk.memoryphotobook.view.StickerView
-import com.example.patryk.memoryphotobook.view.TextView
+import com.example.patryk.memoryphotobook.view.EditView.ImageView.RichImageView
+import com.example.patryk.memoryphotobook.view.EditView.ImageView.StickerView
+import com.example.patryk.memoryphotobook.view.EditView.ImageView.TextView
 import kotlinx.android.synthetic.main.edit_book_view.*
+import android.support.v4.view.ViewCompat.setScaleY
+import android.support.v4.view.ViewCompat.setScaleX
+
+import android.view.ScaleGestureDetector
+import android.widget.ImageView
+import android.text.method.Touch.onTouchEvent
+import android.view.MotionEvent
+import com.example.patryk.memoryphotobook.view.EditView.ImageView.IObjectView
+import com.example.patryk.memoryphotobook.view.ImageListView.*
 import java.lang.Exception
 
+
 class EditBookView : AppCompatActivity(),DisplayView {
+
+    var selected:Image?=null
+        set(value){
+            field=value
+        }
+
+    override var avalbleColor: Array<Int> = arrayOf()
+        set(value) {field=value
+        }
+    override var backgroundColor: Int=0
+        get() = field
+        set(value) {
+            field=value
+            displayLayout?.setBackgroundColor(field)}
     override var avalblePhotoLst: Array<Bitmap> = arrayOf()
     override var availableSticker: Array<Bitmap> = arrayOf()
 
@@ -109,6 +119,7 @@ class EditBookView : AppCompatActivity(),DisplayView {
         elementToChoiceLayout =Layout_Images
         optionsLayout=constraintLayout_options
         optionsLayout.setOnDragListener(OptionLayoutDrag(this))
+        displayLayout = findViewById<ConstraintLayout>(R.id.constraintLayot_display)
         //elementToChoiceLayout.setOnDragListener(ImageDisplayLayoutDrag(this))
         presenter= DisplayPresenter(this,"title")
         findViewById<Button>(R.id.button_addSticker).setOnClickListener {
@@ -121,13 +132,17 @@ class EditBookView : AppCompatActivity(),DisplayView {
             setPhotoInView()
         }
         button_filter.setOnClickListener { setFilterInView() }
+        button_color.setOnClickListener { setColorInView() }
+        button_level.setOnClickListener { setLevelInView() }
+        button_nextPage.setOnClickListener { presenter.nextPage() }
+        button_prevPage.setOnClickListener { presenter.previousPage() }
 
-        displayLayout = findViewById<ConstraintLayout>(R.id.constraintLayot_display)
         displayLayout.setOnDragListener(
             ImageDisplayLayoutDrag(
                 this
             )
         )
+        mScaleGestureDetector = ScaleGestureDetector(this, ScaleListener())
     }
     fun setFrameInView()
     {
@@ -142,6 +157,14 @@ class EditBookView : AppCompatActivity(),DisplayView {
         elementToChoiceLayout.removeAllViews()
         avalibleFilterr.forEach {
             val view = SingleFilterListElement(this,it)
+            elementToChoiceLayout.addView(view)
+        }
+    }
+    fun setColorInView()
+    {
+        elementToChoiceLayout.removeAllViews()
+        avalbleColor.forEach {
+            val view = SingleColorElementList(this,it)
             elementToChoiceLayout.addView(view)
         }
     }
@@ -160,7 +183,40 @@ class EditBookView : AppCompatActivity(),DisplayView {
             elementToChoiceLayout.addView(view)
         }
     }
+    fun setLevelInView()
+    {
+        elementToChoiceLayout.removeAllViews()
+        for(i in 1 until 10)
+        {
+            val view = SingleLevelElementList(this,i)
+            elementToChoiceLayout.addView(view)
+        }
+    }
 
+    override fun onTouchEvent(motionEvent: MotionEvent): Boolean {
+        mScaleGestureDetector?.onTouchEvent(motionEvent)
+        return true
+    }
 
-
+    private var mScaleGestureDetector: ScaleGestureDetector? = null
+    private var mScaleFactor = 1.0f
+    private var mImageView: ImageView? = null
+    private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        override fun onScale(scaleGestureDetector: ScaleGestureDetector): Boolean {
+            mScaleFactor *= scaleGestureDetector.scaleFactor
+            mScaleFactor = Math.max(
+                0.1f,
+                Math.min(mScaleFactor, 2.0f)
+            )
+            for (i in 0 until  displayLayout.childCount)
+            {
+                try{
+                    val obj=displayLayout.getChildAt(i) as IObjectView
+                    if((obj).image==selected)
+                        obj.reSize(mScaleFactor)
+                }catch (e:Exception){}
+            }
+            return true
+        }
+    }
 }

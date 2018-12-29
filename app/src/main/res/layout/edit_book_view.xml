@@ -10,30 +10,62 @@
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" android:id="@+id/constraintLayout_options">
 
-        <Button
-                android:text="Sticker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="0dp" android:id="@+id/button_addSticker"
-                tools:layout_editor_absoluteY="8dp"/>
-        <Button
-                android:text="image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="0dp" android:id="@+id/button_addImage" android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/button_addSticker"/>
-        <Button
-                android:text="frame"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="0dp" android:id="@+id/button_Text" android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/button_addImage"/>
-        <Button
-                android:text="filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="0dp" android:id="@+id/button_filter" android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/button_Text"/>
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                          android:orientation="vertical">
+                <Button
+                        android:text="level"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:layout_editor_absoluteX="0dp" android:id="@+id/button_level"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/button_color"/>
+                <Button
+                        android:text="color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:layout_editor_absoluteX="0dp" android:id="@+id/button_color"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/button_filter"/>
+                <Button
+                        android:text="filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:layout_editor_absoluteX="0dp" android:id="@+id/button_filter"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/button_Text"/>
+                <Button
+                        android:text="frame"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:layout_editor_absoluteX="0dp" android:id="@+id/button_Text" android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/button_addImage"/>
+                <Button
+                        android:text="Sticker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:layout_editor_absoluteX="0dp" android:id="@+id/button_addSticker"
+                        tools:layout_editor_absoluteY="8dp"/>
+                <Button
+                        android:text="image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:layout_editor_absoluteX="0dp" android:id="@+id/button_addImage"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/button_addSticker"/>
+                <Button
+                        android:text="next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:layout_editor_absoluteY="366dp"
+                        tools:layout_editor_absoluteX="0dp" android:id="@+id/button_nextPage"/>
+                <Button
+                        android:text="prev"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/button_prevPage"/>
+            </LinearLayout>
+        </ScrollView>
     </android.support.constraint.ConstraintLayout>
     <android.support.constraint.ConstraintLayout
             android:layout_width="306dp"

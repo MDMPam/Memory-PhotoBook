@@ -2,16 +2,14 @@ package com.example.patryk.memoryphotobook.view.EditView
 
 import android.content.ClipDescription
 import android.graphics.*
-import android.support.constraint.solver.widgets.Rectangle
 import android.util.Log
 import android.view.DragEvent
 import android.view.View
-import com.example.patryk.memoryphotobook.view.ImageListView.SingleFilterListElement
-import com.example.patryk.memoryphotobook.view.ImageListView.SingleFrameListElement
-import com.example.patryk.memoryphotobook.view.ImageListView.SinglePhotoListElement
-import com.example.patryk.memoryphotobook.view.ImageListView.SingleStickerListElement
-import com.example.patryk.memoryphotobook.view.RichImageView
-import com.example.patryk.memoryphotobook.view.StickerView
+import android.widget.ImageView
+import com.example.patryk.memoryphotobook.view.EditView.ImageView.IObjectView
+import com.example.patryk.memoryphotobook.view.EditView.ImageView.RichImageView
+import com.example.patryk.memoryphotobook.view.EditView.ImageView.StickerView
+import com.example.patryk.memoryphotobook.view.ImageListView.*
 import java.lang.Exception
 
 class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
@@ -25,12 +23,6 @@ class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
             DragEvent.ACTION_DRAG_STARTED -> {
                 // Determines if this View can accept the dragged data
                 return if (event.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                    // if you want to apply color when drag started to your view you can uncomment below lines
-                    // to give any color tint to the View to indicate that it can accept data.
-                    // v.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
-                    // Invalidate the view to force a redraw in the new tint
-                    //  v.invalidate();
-                    // returns true to indicate that the View can accept the dragged data.
                     true
                 } else false
                 // Returns false. During the current drag and drop operation, this View will
@@ -39,7 +31,7 @@ class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
 
             DragEvent.ACTION_DRAG_ENTERED -> {
                 // Applies a GRAY or any color tint to the View. Return true; the return value is ignored.
-                v?.background?.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN)
+                //v?.background?.setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_IN)
                 // Invalidate the view to force a redraw in the new tint
                 v?.invalidate()
                 return true
@@ -53,7 +45,7 @@ class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
                 // Re-sets the color tint to blue. Returns true; the return value is ignored.
                 // view.getBackground().setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_IN);
                 //It will clear a color filter .
-                v?.background?.clearColorFilter()
+               // v?.background?.clearColorFilter()
                 // Invalidate the view to force a redraw in the new tint
                 v?.invalidate()
                 return true
@@ -65,7 +57,7 @@ class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
 
                 val dragData = item.text.toString()
 
-                v?.background?.clearColorFilter()
+               // v?.background?.clearColorFilter()
                 // Invalidates the view to force a redraw
                 v?.invalidate()
 
@@ -76,6 +68,8 @@ class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
                 //val container = v as ConstraintLayout
                 try {
                     when(dragData) {
+                        SingleLevelElementList.DataDesc->levelSingleElementCase(event.localState as SingleLevelElementList,event)
+                        SingleColorElementList.DataDesc->colorSingleElementCase(event.localState as SingleColorElementList,event)
                         SingleFilterListElement.DataDesc->frameSingleFilterCase(event.localState as SingleFilterListElement,event)
                         RichImageView.DataDesc -> richImageViewCase(event.localState as RichImageView,event)
                         StickerView.DataDesc-> stickerViewCase(event.localState as StickerView,event)
@@ -95,7 +89,7 @@ class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
 
             DragEvent.ACTION_DRAG_ENDED -> {
                 // Turns off any color tinting
-                v?.background?.clearColorFilter()
+               // v?.background?.clearColorFilter()
                 // Invalidates the view to force a redraw
                 v?.invalidate()
                 // Does a getResult(), and displays what happened.
@@ -112,7 +106,7 @@ class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
         return false
     }
 
-    fun richImageViewCase(richImage:RichImageView, event:DragEvent){
+    fun richImageViewCase(richImage: RichImageView, event:DragEvent){
         view.presenter.move(richImage.richImage,
             Point(event.x.toInt() - richImage.richImage.bitmap!!.width/2,event.y.toInt()-richImage.richImage.bitmap!!.height/2))
     }
@@ -123,9 +117,10 @@ class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
     }
     fun photoSingleElementCase(photoListElement: SinglePhotoListElement, event:DragEvent){
 
-        view.presenter.move(view.presenter.addRichImage(photoListElement.photo),
-            Point(event.x.toInt()-photoListElement.photo.width/2,event.y.toInt()-photoListElement.photo.height/2)
-        )
+        view.presenter.addRichImage(photoListElement.photo).apply {
+            view.presenter.move(this,Point(event.x.toInt()-this.resizedWidth/2,event.y.toInt()-this.resizedHeight/2))
+        }
+
         photoListElement?.visibility = View.VISIBLE//finally set Visibility to VISIBLE
     }
     fun frameSingleFilterCase(filterListElement: SingleFilterListElement, event:DragEvent){
@@ -155,12 +150,28 @@ class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
         )
         frameListElement?.visibility = View.VISIBLE//finally set Visibility to VISIBLE
     }
+    fun colorSingleElementCase(color:SingleColorElementList,event: DragEvent)
+    {
+        view.presenter.setBackgroundColor(color.color)
+    }
 
     fun stickerSingleElementCase(stickerListElement: SingleStickerListElement, event:DragEvent){
-    view.presenter.move(view.presenter.addSticker(stickerListElement.sticker),
-        Point(event.x.toInt()-stickerListElement.sticker.width/2,event.y.toInt()-stickerListElement.sticker.height/2)
-    )
+        view.presenter.addSticker(stickerListElement.sticker).apply {
+            view.presenter.move(this,Point(event.x.toInt()-this.wight/2,event.y.toInt()-this.height/2))
+        }
         stickerListElement?.visibility = View.VISIBLE//finally set Visibility to VISIBLE
 
-}
+    }
+    fun levelSingleElementCase(levelElementList: SingleLevelElementList, event:DragEvent) {
+        for (i in 0 until  view.displayLayout.childCount)
+        {
+            try{
+                val obj=view.displayLayout.getChildAt(i) as IObjectView
+                val img=view.displayLayout.getChildAt(i) as ImageView
+                if(event.x> obj.image.possition.x&& event.x<obj.image.possition.x+obj.image.wight&&event.y>obj.image.possition.y&&event.y<obj.image.possition.y+obj.image.height) {
+                    view.presenter.setLevel(obj.image,levelElementList.level)
+                }
+            }catch (e:Exception){}
+        }
+    }
 }

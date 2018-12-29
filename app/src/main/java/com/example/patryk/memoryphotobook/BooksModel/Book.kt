@@ -9,7 +9,7 @@ class Book(
     var title:String,
     var height:Int,
     var wight:Int,
-    var defaultBackgrounColor:Color,
+    var defaultBackgrounColor:Int,
     var defaultPageTemplate:PageTemplate)
 {
     var coverPage:Page=PageFactory.buildCoverPage(defaultPageTemplate)

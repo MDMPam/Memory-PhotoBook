@@ -1,13 +1,15 @@
 package com.example.patryk.memoryphotobook
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Point
 import com.example.patryk.memoryphotobook.BooksModel.*
+import com.example.patryk.memoryphotobook.BooksModel.managers.*
 
 class DisplayPresenter(var view:DisplayView, bookTitle:String) {
     var stickerManager= StickerImageManager(view.context)
-    var manager=BookManager(view.context)
-    var frameManager=FrameManager(view.context)
+    var manager= BookManager(view.context)
+    var frameManager= FrameManager(view.context)
     var scaler=BookScaler()
     var bookModel: DisplayBookModel
     var photoManager = PhotoManager(view.context)
@@ -15,8 +17,10 @@ class DisplayPresenter(var view:DisplayView, bookTitle:String) {
         view.avalblePhotoLst=photoManager.photoList
         view.avalibleFrame=frameManager.frameList
         view.availableSticker=stickerManager.stickerList
-        view.avalibleFilterr=ColorFilterManagerr().filterArray
+        view.avalibleFilterr= ColorFilterManagerr().filterArray
+        view.avalbleColor=ColorManager().colorArray
         bookModel= DisplayBookModel(scaler.scaleBook( manager.loadBook(bookTitle),view.width, view.height))
+        view.backgroundColor=bookModel.backgroundColor
     }
 
 
@@ -84,6 +88,31 @@ class DisplayPresenter(var view:DisplayView, bookTitle:String) {
     fun decLevel(image:Image)
     {
         bookModel.decLevel(image)
+    }
+
+    fun setLevel(image: Image,lvl:Int)
+    {
+        image.level=lvl
+    }
+    fun setBackgroundColor(color:Int)
+    {
+        bookModel.backgroundColor=color
+        view.backgroundColor=bookModel.backgroundColor
+    }
+    fun nextPage()
+    {
+        bookModel.nextPage()
+        view.imageList=bookModel.currentPage.richImageList.toTypedArray()
+        view.textList=bookModel.currentPage.textList.toTypedArray()
+        view.stickerList=bookModel.currentPage.stickerList.toTypedArray()
+    }
+
+    fun previousPage()
+    {
+        bookModel.previousPage()
+        view.imageList=bookModel.currentPage.richImageList.toTypedArray()
+        view.textList=bookModel.currentPage.textList.toTypedArray()
+        view.stickerList=bookModel.currentPage.stickerList.toTypedArray()
     }
 
 

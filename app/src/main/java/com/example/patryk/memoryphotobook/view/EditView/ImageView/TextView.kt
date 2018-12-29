@@ -1,4 +1,4 @@
-package com.example.patryk.memoryphotobook.view
+package com.example.patryk.memoryphotobook.view.EditView.ImageView
 
 import android.content.ClipData
 import android.content.ClipDescription
@@ -49,7 +49,7 @@ class TextView(view: EditBookView, var text: Text):ImageView(view.context) {
         }
     }
 
-    private class MyTouchListener(var view: EditBookView, var text:TextView) : View.OnTouchListener {
+    private class MyTouchListener(var view: EditBookView, var text: TextView) : View.OnTouchListener {
         var dX: Float = 0.toFloat()
         var dY:Float = 0.toFloat()
         override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {

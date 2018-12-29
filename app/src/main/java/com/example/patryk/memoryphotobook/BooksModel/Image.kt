@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import java.lang.Exception
 
-abstract class Image {
+abstract  open class Image {
 
     var bitmap:Bitmap?=null
     var possition:Point=Point(0,0)
@@ -17,9 +17,10 @@ abstract class Image {
     var level:Int=1
 
     abstract fun createBitmap()
-    fun resize(width:Int,height:Int)
+    open fun resize(width:Int,height:Int)
     {
-        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false)
+
+        
 
     }
 }

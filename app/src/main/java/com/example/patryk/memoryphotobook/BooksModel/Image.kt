@@ -7,6 +7,7 @@ import java.lang.Exception
 abstract  open class Image {
 
     var bitmap:Bitmap?=null
+    var href=""
     var possition:Point=Point(0,0)
     var wight:Int
         get() {return try{bitmap!!.width}catch (e:Exception){0}}

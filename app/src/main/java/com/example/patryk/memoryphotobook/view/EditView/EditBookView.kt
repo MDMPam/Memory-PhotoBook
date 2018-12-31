@@ -1,9 +1,12 @@
 package com.example.patryk.memoryphotobook.view.EditView
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.Point
+import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
@@ -16,13 +19,11 @@ import com.example.patryk.memoryphotobook.view.EditView.ImageView.RichImageView
 import com.example.patryk.memoryphotobook.view.EditView.ImageView.StickerView
 import com.example.patryk.memoryphotobook.view.EditView.ImageView.TextView
 import kotlinx.android.synthetic.main.edit_book_view.*
-import android.support.v4.view.ViewCompat.setScaleY
-import android.support.v4.view.ViewCompat.setScaleX
 
 import android.view.ScaleGestureDetector
 import android.widget.ImageView
-import android.text.method.Touch.onTouchEvent
 import android.view.MotionEvent
+import android.widget.EditText
 import com.example.patryk.memoryphotobook.view.EditView.ImageView.IObjectView
 import com.example.patryk.memoryphotobook.view.ImageListView.*
 import java.lang.Exception
@@ -30,6 +31,7 @@ import java.lang.Exception
 
 class EditBookView : AppCompatActivity(),DisplayView {
 
+    override var avaiableFont: Array<Typeface> = arrayOf()
     var selected:Image?=null
         set(value){
             field=value
@@ -61,17 +63,16 @@ class EditBookView : AppCompatActivity(),DisplayView {
         set(value) {}
     override var height: Int
         get() {
-            val display = windowManager.defaultDisplay
-            val size = Point()
-            display.getSize(size)
-            return  size.y}
+            return displayLayout.height}
         set(value) {}
     override var width: Int
         get() {
-            val display = windowManager.defaultDisplay
-            val size = Point()
-            display.getSize(size)
-            return  size.x}
+            return displayLayout.width
+            //val display = windowManager.defaultDisplay
+           // val size = Point()
+            //display.getSize(size)
+            //return  size.x
+            }
         set(value) {}
     override var stickerList: Array<Sticker> = arrayOf()
         set(value) {
@@ -125,7 +126,7 @@ class EditBookView : AppCompatActivity(),DisplayView {
         findViewById<Button>(R.id.button_addSticker).setOnClickListener {
            setStickerInView()
         }
-        findViewById<Button>(R.id.button_Text).setOnClickListener {
+        findViewById<Button>(R.id.button_frame).setOnClickListener {
             setFrameInView()
         }
         findViewById<Button>(R.id.button_addImage).setOnClickListener {
@@ -135,8 +136,9 @@ class EditBookView : AppCompatActivity(),DisplayView {
         button_color.setOnClickListener { setColorInView() }
         button_level.setOnClickListener { setLevelInView() }
         button_nextPage.setOnClickListener { presenter.nextPage() }
-        button_prevPage.setOnClickListener { presenter.previousPage() }
-
+        button_prevPage.setOnClickListener {presenter.previousPage()        }
+        button_text.setOnClickListener { setFontInView() }
+        button_saveAsHtml.setOnClickListener { presenter.saveAsHtml() }
         displayLayout.setOnDragListener(
             ImageDisplayLayoutDrag(
                 this
@@ -183,6 +185,14 @@ class EditBookView : AppCompatActivity(),DisplayView {
             elementToChoiceLayout.addView(view)
         }
     }
+    fun setFontInView()
+    {
+        elementToChoiceLayout.removeAllViews()
+        avaiableFont.forEach {
+            val view = SingleFontElementList(this,it)
+            elementToChoiceLayout.addView(view)
+        }
+    }
     fun setLevelInView()
     {
         elementToChoiceLayout.removeAllViews()
@@ -192,8 +202,43 @@ class EditBookView : AppCompatActivity(),DisplayView {
             elementToChoiceLayout.addView(view)
         }
     }
+    fun addText(typeface:Typeface,position:Point){
+        var descriptionView:EditText= EditText(this).apply {
+            this.hint="opis"
+        }
+        var hrefView=EditText(this).apply { hint="link do opisu" }
+        val layout = LinearLayout(context)
+        layout.orientation = LinearLayout.VERTICAL
+        layout.addView(descriptionView)
+        layout.addView(hrefView)
+
+
+        val builder: AlertDialog.Builder
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert)
+        } else {
+            builder = AlertDialog.Builder(context)
+        }
+        builder.setTitle("Dodaj opis")
+            //.setMessage("Are you sure you want to delete this entry?")
+            .setView(layout)
+            //.setView(hrefView)
+            .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener { dialog, which ->
+                if(descriptionView.text.toString().isNotEmpty())
+                    presenter.setHref(presenter.setTypeface(presenter.move(presenter.addText(descriptionView.text.toString()),position),typeface),hrefView.text.toString())
+            })
+            .setNegativeButton(android.R.string.no, DialogInterface.OnClickListener { dialog, which ->
+                // do nothing
+            })
+            .setIcon(android.R.drawable.ic_dialog_info)
+            .show()
+
+        var x=0
+
+    }
 
     override fun onTouchEvent(motionEvent: MotionEvent): Boolean {
+
         mScaleGestureDetector?.onTouchEvent(motionEvent)
         return true
     }
@@ -219,4 +264,5 @@ class EditBookView : AppCompatActivity(),DisplayView {
             return true
         }
     }
+
 }

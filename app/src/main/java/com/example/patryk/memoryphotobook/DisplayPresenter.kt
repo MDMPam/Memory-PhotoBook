@@ -3,6 +3,7 @@ package com.example.patryk.memoryphotobook
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Point
+import android.graphics.Typeface
 import com.example.patryk.memoryphotobook.BooksModel.*
 import com.example.patryk.memoryphotobook.BooksModel.managers.*
 
@@ -14,6 +15,7 @@ class DisplayPresenter(var view:DisplayView, bookTitle:String) {
     var bookModel: DisplayBookModel
     var photoManager = PhotoManager(view.context)
     init {
+
         view.avalblePhotoLst=photoManager.photoList
         view.avalibleFrame=frameManager.frameList
         view.availableSticker=stickerManager.stickerList
@@ -21,6 +23,10 @@ class DisplayPresenter(var view:DisplayView, bookTitle:String) {
         view.avalbleColor=ColorManager().colorArray
         bookModel= DisplayBookModel(scaler.scaleBook( manager.loadBook(bookTitle),view.width, view.height))
         view.backgroundColor=bookModel.backgroundColor
+        view.avaiableFont=FontManager(view.context).fontArray
+        bookModel.book.title="book1"
+        bookModel.book.height=view.height
+        bookModel.book.wight=view.width
     }
 
 
@@ -105,6 +111,7 @@ class DisplayPresenter(var view:DisplayView, bookTitle:String) {
         view.imageList=bookModel.currentPage.richImageList.toTypedArray()
         view.textList=bookModel.currentPage.textList.toTypedArray()
         view.stickerList=bookModel.currentPage.stickerList.toTypedArray()
+        view.backgroundColor=bookModel.currentPage.backgroundColor
     }
 
     fun previousPage()
@@ -113,6 +120,25 @@ class DisplayPresenter(var view:DisplayView, bookTitle:String) {
         view.imageList=bookModel.currentPage.richImageList.toTypedArray()
         view.textList=bookModel.currentPage.textList.toTypedArray()
         view.stickerList=bookModel.currentPage.stickerList.toTypedArray()
+        view.backgroundColor=bookModel.currentPage.backgroundColor
+    }
+    fun setTypeface(text: Text,typeface: Typeface):Text
+    {
+        text.font=typeface
+        return  text
+    }
+
+    fun setHref(image: Image,href:String):Image
+    {
+        image.href=href
+        return image
+    }
+
+    fun saveAsHtml()
+    {
+        bookModel.book.height=view.height
+        bookModel.book.wight=view.width
+        BookConverter.convertToHTML(view.context,bookModel.book)
     }
 
 

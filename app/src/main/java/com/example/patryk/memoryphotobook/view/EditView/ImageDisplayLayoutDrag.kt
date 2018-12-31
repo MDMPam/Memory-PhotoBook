@@ -6,10 +6,13 @@ import android.util.Log
 import android.view.DragEvent
 import android.view.View
 import android.widget.ImageView
+
 import com.example.patryk.memoryphotobook.view.EditView.ImageView.IObjectView
 import com.example.patryk.memoryphotobook.view.EditView.ImageView.RichImageView
 import com.example.patryk.memoryphotobook.view.EditView.ImageView.StickerView
+import com.example.patryk.memoryphotobook.view.EditView.ImageView.TextView
 import com.example.patryk.memoryphotobook.view.ImageListView.*
+import org.w3c.dom.Text
 import java.lang.Exception
 
 class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
@@ -68,6 +71,8 @@ class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
                 //val container = v as ConstraintLayout
                 try {
                     when(dragData) {
+                        TextView.DataDesc->textViewCase(event.localState as TextView,event)
+                        SingleFontElementList.DataDesc->fontSingleElementCase(event.localState as SingleFontElementList,event)
                         SingleLevelElementList.DataDesc->levelSingleElementCase(event.localState as SingleLevelElementList,event)
                         SingleColorElementList.DataDesc->colorSingleElementCase(event.localState as SingleColorElementList,event)
                         SingleFilterListElement.DataDesc->frameSingleFilterCase(event.localState as SingleFilterListElement,event)
@@ -115,6 +120,11 @@ class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
             Point(event.x.toInt() - stickerView.sticker.wight/2,event.y.toInt()-stickerView.sticker.height/2))
 
     }
+    fun textViewCase(textView: TextView, event: DragEvent)
+    {
+        view.presenter.move(textView.text,
+            Point(event.x.toInt() - textView.text.wight/2,event.y.toInt()-textView.text.height/2))
+    }
     fun photoSingleElementCase(photoListElement: SinglePhotoListElement, event:DragEvent){
 
         view.presenter.addRichImage(photoListElement.photo).apply {
@@ -149,6 +159,11 @@ class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
             Point(event.x.toInt()-frameListElement.frame.bitMap.width/2,event.y.toInt()-frameListElement.frame.bitMap.height/2)
         )
         frameListElement?.visibility = View.VISIBLE//finally set Visibility to VISIBLE
+    }
+
+    fun fontSingleElementCase(fontView:SingleFontElementList,event: DragEvent)
+    {
+        view.addText(fontView.font,Point(event.x.toInt(),event.y.toInt()))
     }
     fun colorSingleElementCase(color:SingleColorElementList,event: DragEvent)
     {

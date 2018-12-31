@@ -3,28 +3,42 @@ package com.example.patryk.memoryphotobook.view.EditView.ImageView
 import android.content.ClipData
 import android.content.ClipDescription
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Point
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
+import com.example.patryk.memoryphotobook.BooksModel.Image
 import com.example.patryk.memoryphotobook.BooksModel.Text
 import com.example.patryk.memoryphotobook.view.EditView.EditBookView
 
-class TextView(view: EditBookView, var text: Text):ImageView(view.context) {
+class TextView(var view: EditBookView, var text: Text):ImageView(view.context),IObjectView {
     companion object {
         const val DataDesc="TextView"
+    }
+
+    override var highlighted: Boolean=false
+    override var image: Image
+        get() = text
+        set(value) {}
+
+    override fun reSize(scale: Float) {
+        text.resize((Text.baseFontSize*scale).toInt(),0)
     }
     init {
         elevation=text.level.toFloat()
         setImageBitmap(text.bitmap)
         setOnLongClickListener(TextLongClick())
-        //setOnTouchListener(MyTouchListener(view, this))
+        setOnTouchListener(MyTouchListener(view, this))
     }
     override fun onDraw(canvas: Canvas?) {
         setImageBitmap(text.bitmap)
         x=text.possition.x.toFloat()
         y=text.possition.y.toFloat()
         super.onDraw(canvas)
+        if (view.selected==text)
+            canvas?.drawCircle(10.toFloat(),10F,10F, Paint().also { it.color= Color.GREEN })
     }
     class TextLongClick:View.OnLongClickListener
     {
@@ -50,37 +64,14 @@ class TextView(view: EditBookView, var text: Text):ImageView(view.context) {
     }
 
     private class MyTouchListener(var view: EditBookView, var text: TextView) : View.OnTouchListener {
-        var dX: Float = 0.toFloat()
-        var dY:Float = 0.toFloat()
         override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-            val X = motionEvent.getRawX().toInt()
-            val Y = motionEvent.getRawY().toInt()
+
             when (motionEvent.getAction() and MotionEvent.ACTION_MASK) {
                 MotionEvent.ACTION_DOWN -> {
-                    dX = view.getX() - motionEvent.getRawX();
-                    dY = view.getY() - motionEvent.getRawY();
-                    return true
+                    this.view.selected=text.text
+                    return false
                 }
-                MotionEvent.ACTION_UP -> {
-                    return true
-                }
-                MotionEvent.ACTION_POINTER_DOWN -> {
-                    return true
-                }
-                MotionEvent.ACTION_POINTER_UP -> {
-                    return true
-                }
-                MotionEvent.ACTION_MOVE -> {
 
-                    view.animate()
-                        .x(motionEvent.getRawX() + dX)
-                        .y(motionEvent.getRawY() + dY)
-                        .setDuration(0)
-                        .start()
-                    this.view.presenter.move(text.text,
-                        Point(motionEvent.getRawX().toInt() + dX.toInt(),motionEvent.getRawY().toInt() + dY.toInt())
-                    )
-                }
             }
             //_root.invalidate()
             return false

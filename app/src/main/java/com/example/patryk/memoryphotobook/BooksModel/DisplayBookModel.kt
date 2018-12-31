@@ -37,7 +37,7 @@ class DisplayBookModel(var book:Book) {
         return book.addSticker(bitmap,currentPage).also { it.resize(270,120) }
     }
     fun addText(text: String):Text{
-        return book.addText(text,currentPage).also { it.resize(270,120) }
+        return book.addText(text,currentPage)
     }
 
     fun addRichImage(src:Bitmap):RichImage

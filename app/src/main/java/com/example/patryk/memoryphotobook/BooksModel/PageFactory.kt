@@ -6,11 +6,11 @@ class PageFactory {
     companion object {
         fun buildPage(temp:PageTemplate, backgroundColor: Color?=null):Page
         {
-            return  Page(Color())
+            return  Page(Color.WHITE)
         }
         fun buildCoverPage(temp: PageTemplate):Page
         {
-            return Page(Color())
+            return Page(Color.WHITE)
         }
     }
 }

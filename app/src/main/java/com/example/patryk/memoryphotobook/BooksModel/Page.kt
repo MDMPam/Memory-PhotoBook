@@ -5,7 +5,8 @@ import android.graphics.Color
 import android.graphics.Paint
 
 class Page(
-    val backgroundColor: Color
+
+    var backgroundColor: Int
 ) {
     val stickerList:MutableList<Sticker> = mutableListOf()
     val textList:MutableList<Text> = mutableListOf()
@@ -31,6 +32,18 @@ class Page(
         var image=RichImage(source)
         richImageList.add(image)
         return image
+    }
+    fun remove(richImage: RichImage)
+    {
+        richImageList.remove(richImage)
+    }
+    fun remove(text: Text)
+    {
+        textList.remove(text)
+    }
+    fun remove(sticker: Sticker)
+    {
+        stickerList.remove(sticker)
     }
 
 }

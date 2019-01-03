@@ -9,7 +9,7 @@ class Book(
     var title:String,
     var height:Int,
     var wight:Int,
-    var defaultBackgrounColor:Color,
+    var defaultBackgrounColor:Int,
     var defaultPageTemplate:PageTemplate)
 {
     var coverPage:Page=PageFactory.buildCoverPage(defaultPageTemplate)
@@ -24,6 +24,16 @@ class Book(
         pageList.add(page)
     }
 
+    fun remove(richImage: RichImage,page: Page){
+        page.remove(richImage)
+    }
+    fun remove(text: Text,page: Page){
+        page.remove(text)
+    }
+    fun remove(stick: Sticker,page: Page){
+        page.remove(stick)
+    }
+
     fun addSticker(src:Bitmap,page:Page):Sticker{
         return page.addSticker(src)
     }
@@ -31,6 +41,24 @@ class Book(
     fun addText(text:String,page:Page):Text{
         return page.addText(text)
     }
+
+    fun addRichImage(src:Bitmap,page: Page):RichImage
+    {
+        return page.addRichImage(src)
+    }
+
+    fun setFilter(image:RichImage,filter:CFilter)
+    {
+        image.filter=filter.filter
+    }
+
+    fun move(richImage: RichImage,p:Point):RichImage
+    {
+        richImage.possition=p
+        return richImage
+    }
+
+
     fun move(text:Text,p:Point):Text
     {
         text.possition= p

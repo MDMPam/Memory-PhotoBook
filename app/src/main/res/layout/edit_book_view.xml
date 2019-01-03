@@ -72,6 +72,10 @@
                         android:text="html"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" android:id="@+id/button_saveAsHtml"/>
+                <Button
+                        android:text="PDF"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/button_PDF"/>
             </LinearLayout>
         </ScrollView>
     </android.support.constraint.ConstraintLayout>

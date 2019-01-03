@@ -133,12 +133,22 @@ class DisplayPresenter(var view:DisplayView, bookTitle:String) {
         image.href=href
         return image
     }
+    fun setColor(text: Text,color:Int)
+    {
+        text.color=color
+    }
 
     fun saveAsHtml()
     {
         bookModel.book.height=view.height
         bookModel.book.wight=view.width
-        BookConverter.convertToHTML(view.context,bookModel.book)
+        BookConverter.convertToHTML(bookModel.book)
+    }
+    fun saveAsPDF()
+    {
+        bookModel.book.height=view.height
+        bookModel.book.wight=view.width
+        BookConverter.convertToPDF(bookModel.book)
     }
 
 

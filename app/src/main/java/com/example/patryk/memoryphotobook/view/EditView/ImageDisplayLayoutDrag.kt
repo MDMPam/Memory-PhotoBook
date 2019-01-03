@@ -167,6 +167,14 @@ class  ImageDisplayLayoutDrag(var view: EditBookView): View.OnDragListener
     }
     fun colorSingleElementCase(color:SingleColorElementList,event: DragEvent)
     {
+
+        view.textList.forEach {
+            if(event.x> it.possition.x&& event.x<it.possition.x+it.wight&&event.y>it.possition.y&&event.y<it.possition.y+it.height) {
+                view.presenter.setColor(it,color.color)
+                return
+            }
+        }
+
         view.presenter.setBackgroundColor(color.color)
     }
 

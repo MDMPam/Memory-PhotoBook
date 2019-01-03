@@ -1,11 +1,8 @@
 package com.example.patryk.memoryphotobook.BooksModel
 
-import android.graphics.Paint
-import android.graphics.Bitmap
 import android.R.attr.textColor
 import android.R.attr.textSize
-import android.graphics.Canvas
-import android.graphics.Typeface
+import android.graphics.*
 
 
 class Text(var text:String=""):Image() {
@@ -13,7 +10,10 @@ companion object {
     val baseFontSize=50F
 }
 
-
+    var color=Color.BLACK
+    set(value) {field=value
+    paint.color=value
+    createBitmap()}
     var font:Typeface
         get() {return paint.typeface}
         set(value) {paint.typeface=value

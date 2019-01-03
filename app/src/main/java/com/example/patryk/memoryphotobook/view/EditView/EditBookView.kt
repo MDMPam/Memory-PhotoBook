@@ -139,6 +139,7 @@ class EditBookView : AppCompatActivity(),DisplayView {
         button_prevPage.setOnClickListener {presenter.previousPage()        }
         button_text.setOnClickListener { setFontInView() }
         button_saveAsHtml.setOnClickListener { presenter.saveAsHtml() }
+        button_PDF.setOnClickListener { presenter.saveAsPDF() }
         displayLayout.setOnDragListener(
             ImageDisplayLayoutDrag(
                 this

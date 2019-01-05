@@ -7,7 +7,7 @@ import android.graphics.Typeface
 import com.example.patryk.memoryphotobook.BooksModel.*
 import com.example.patryk.memoryphotobook.BooksModel.managers.*
 
-class DisplayPresenter(var view:DisplayView, bookTitle:String) {
+class DisplayPresenter(var view:DisplayView, bookTitle:String,pageTemplate: PageTemplate?=null, width:Int?=null,height:Int?=null) {
     var stickerManager= StickerImageManager(view.context)
     var manager= BookManager(view.context)
     var frameManager= FrameManager(view.context)
@@ -15,32 +15,60 @@ class DisplayPresenter(var view:DisplayView, bookTitle:String) {
     var bookModel: DisplayBookModel
     var photoManager = PhotoManager(view.context)
     init {
-
+        val initWidth=if (width!=null)width else view.width
+        val initheight=if (height!=null)height else view.height
         view.avalblePhotoLst=photoManager.photoList
         view.avalibleFrame=frameManager.frameList
         view.availableSticker=stickerManager.stickerList
         view.avalibleFilterr= ColorFilterManagerr().filterArray
         view.avalbleColor=ColorManager().colorArray
-        bookModel= DisplayBookModel(scaler.scaleBook( manager.loadBook(bookTitle),view.width, view.height))
-        view.backgroundColor=bookModel.backgroundColor
         view.avaiableFont=FontManager(view.context).fontArray
-        bookModel.book.title="book1"
-        bookModel.book.height=view.height
-        bookModel.book.wight=view.width
+        var book=BookManager(view.context).loadBook(bookTitle)
+        if(book==null) book=Book(bookTitle,initheight,initWidth, Color.WHITE,pageTemplate!!)
+        bookModel= DisplayBookModel(book)
+        view.backgroundColor=bookModel.backgroundColor
+
+        refreshView()
+
+
+    }
+
+    private fun refreshView()
+    {
+        view.imageList=bookModel.currentPage.richImageList.toTypedArray()
+        view.textList=bookModel.currentPage.textList.toTypedArray()
+        view.stickerList=bookModel.currentPage.stickerList.toTypedArray()
+        view.backgroundColor=bookModel.currentPage.backgroundColor
     }
 
 
+
     fun addSticker(bitmap: Bitmap):Sticker{
+        //todo change it /becose of init height
+        bookModel.book.height=view.height
+        bookModel.book.wight=view.width
+
+
         var ret= bookModel.addSticker(bitmap)
         view.stickerList=bookModel.currentPage.stickerList.toTypedArray()
         return ret
     }
     fun addText(text:String):Text{
+        //todo change it /becose of init height
+        bookModel.book.height=view.height
+        bookModel.book.wight=view.width
+
+
         var ret= bookModel.addText(text)
         view.textList=bookModel.currentPage.textList.toTypedArray()
         return ret
     }
     fun addRichImage(srcBitmap: Bitmap):RichImage{
+        //todo change it /becose of init height
+        bookModel.book.height=view.height
+        bookModel.book.wight=view.width
+
+
         var ret= bookModel.addRichImage(srcBitmap)
         view.imageList=bookModel.currentPage.richImageList.toTypedArray()
         return ret
@@ -108,19 +136,13 @@ class DisplayPresenter(var view:DisplayView, bookTitle:String) {
     fun nextPage()
     {
         bookModel.nextPage()
-        view.imageList=bookModel.currentPage.richImageList.toTypedArray()
-        view.textList=bookModel.currentPage.textList.toTypedArray()
-        view.stickerList=bookModel.currentPage.stickerList.toTypedArray()
-        view.backgroundColor=bookModel.currentPage.backgroundColor
+        refreshView()
     }
 
     fun previousPage()
     {
         bookModel.previousPage()
-        view.imageList=bookModel.currentPage.richImageList.toTypedArray()
-        view.textList=bookModel.currentPage.textList.toTypedArray()
-        view.stickerList=bookModel.currentPage.stickerList.toTypedArray()
-        view.backgroundColor=bookModel.currentPage.backgroundColor
+        refreshView()
     }
     fun setTypeface(text: Text,typeface: Typeface):Text
     {

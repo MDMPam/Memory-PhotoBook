@@ -9,10 +9,10 @@ class Book(
     var title:String,
     var height:Int,
     var wight:Int,
-    var defaultBackgrounColor:Int,
+    var defaultBackgroundColor:Int,
     var defaultPageTemplate:PageTemplate)
 {
-    var coverPage:Page=PageFactory.buildCoverPage(defaultPageTemplate)
+    var coverPage:Page=PageFactory.buildCoverPage(defaultPageTemplate,this)
     var pageList:MutableList<Page> = mutableListOf()
 
     fun addPage(template:PageTemplate=defaultPageTemplate)

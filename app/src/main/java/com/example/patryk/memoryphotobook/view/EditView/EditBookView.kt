@@ -26,6 +26,7 @@ import android.view.MotionEvent
 import android.widget.EditText
 import com.example.patryk.memoryphotobook.view.EditView.ImageView.IObjectView
 import com.example.patryk.memoryphotobook.view.ImageListView.*
+import com.example.patryk.memoryphotobook.view.menu_view.MenuView
 import java.lang.Exception
 
 
@@ -117,12 +118,17 @@ class EditBookView : AppCompatActivity(),DisplayView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.edit_book_view)
+        val template :PageTemplate? =try{PageTemplate.fromInt(intent.getIntExtra(MenuView.bookTemplate,0))}catch (e:Exception){null}
+        val initWight :Int? =try{intent.getIntExtra(MenuView.bookViewWidth,0)-108}catch (e:Exception){null}
+        val initHeight :Int? =try{intent.getIntExtra(MenuView.bookViewHight,0)}catch (e:Exception){null}
+        val title :String =try{intent.getStringExtra(MenuView.bookTitle)}catch (e:Exception){""}
+
         elementToChoiceLayout =Layout_Images
         optionsLayout=constraintLayout_options
         optionsLayout.setOnDragListener(OptionLayoutDrag(this))
         displayLayout = findViewById<ConstraintLayout>(R.id.constraintLayot_display)
         //elementToChoiceLayout.setOnDragListener(ImageDisplayLayoutDrag(this))
-        presenter= DisplayPresenter(this,"title")
+        presenter= DisplayPresenter(this,title,template,initWight,initHeight)
         findViewById<Button>(R.id.button_addSticker).setOnClickListener {
            setStickerInView()
         }

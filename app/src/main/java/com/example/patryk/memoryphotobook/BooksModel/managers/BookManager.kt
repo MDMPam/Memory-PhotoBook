@@ -12,15 +12,9 @@ class BookManager(context:Context) {
         return arrayOf()
     }
 
-    fun loadBook(name : String): Book
+    fun loadBook(name : String): Book?
     {
-        return Book(
-            "",
-            0,
-            0,
-            Color.WHITE,
-            PageTemplate.None
-        )
+        return null
     }
 
     fun saveBook(book: Book)

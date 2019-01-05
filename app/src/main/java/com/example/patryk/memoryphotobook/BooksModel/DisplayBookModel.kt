@@ -1,15 +1,14 @@
 package com.example.patryk.memoryphotobook.BooksModel
 
 import android.graphics.Bitmap
-import android.graphics.Paint
 import android.graphics.Point
 
 class DisplayBookModel(var book:Book) {
     var currentPage=book.coverPage
     private var currentPageNumber:Int=-1
     var defaultBackgroundColor:Int
-        get() {return book.defaultBackgrounColor}
-        set(value) {book.defaultBackgrounColor=value}
+        get() {return book.defaultBackgroundColor}
+        set(value) {book.defaultBackgroundColor=value}
     var backgroundColor:Int
         get() {return currentPage.backgroundColor}
         set(value) {currentPage.backgroundColor=value}
